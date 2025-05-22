@@ -46,9 +46,11 @@ name: 'Terraform'
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev", "production" ]
   pull_request:
-
+env: 
+  AA_WF_VAR: "This is a workflow env variable"
+  
 permissions:
   contents: read
 
@@ -106,8 +108,10 @@ jobs:
   apply:
     name: 'Terraform Apply'
     runs-on: self-hosted
-    environment: production
+    environment: ${{github.ref_name}}
     needs: ["plan"]
+    env: 
+      AA_ENV_VARIABLES: ${{vars.TF_VAR_NAME}}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -120,6 +124,14 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          
+      - name: Tests
+        env: 
+          AA_STEP_VAR: "my variable"
+        run: |
+          echo "Github Env Variable: ${{ VARS.TF_VAR_NAME}}"
+          export
+          
       # Download the plan 
       - name: Download a single artifact
         uses: actions/download-artifact@v4
