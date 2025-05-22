@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "this" {
-  name     = "${var.name_prefix}-rg"
+  name     = "${var.name_prefix}-rg3"
   location = "West Europe"
   tags = var.tags
 }
