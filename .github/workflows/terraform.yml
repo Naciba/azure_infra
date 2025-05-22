@@ -88,6 +88,8 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false -out plan.out
+      env:
+        TF_VAR_name: ${{vars.TF_VAR_NAME}}
       
      # Plan summary
     - name: Show terraform
